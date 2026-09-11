@@ -6,7 +6,7 @@ I used an AI coding assistant as an implementation partner for the take-home. I 
 
 I also used the agent to challenge design decisions rather than only generate code. In particular, I asked it to identify failure modes around resume uploads and email delivery, then reviewed its suggestions against the assignment requirements.
 
-One subtle issue in an early generated approach was serving the upload directory as public static files. That technically made resume rendering easy, but it would expose candidate documents to anyone who knew a URL. I caught this during the security review and changed the design so stored files use generated names and resume retrieval happens only through the authenticated `/leads/{id}/resume` API.
+One issue in the generated test setup involved SQLite database cleanup. The initial pytest fixture deleted the test database file while SQLAlchemy could still have pooled connections to it, which caused subsequent tests to fail with a readonly database error. I identified the issue by running the full test suite and reviewing the traceback, then fixed the fixture by resetting the schema and disposing SQLAlchemy connections correctly. After the change, all backend tests passed.
 
 I manually reviewed generated code, ran the application locally, exercised the complete prospect-to-attorney workflow, and adjusted implementation details where needed.
 
